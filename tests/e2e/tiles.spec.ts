@@ -71,6 +71,18 @@ test("the View menu switches between Nevanda and rectangular Geoduck tiles", asy
   await expect.poll(() => mapCellRatio(page)).toBeLessThan(1.78);
   await page.screenshot({ path: "test-results/geoduck-tiles.png" });
 
+  // its native cells are too wide for the pane at the old smallest zoom, so the map still overflowed
+  for (let i = 0; i < 3; i++) await page.getByRole("button", { name: "Zoom out" }).click();
+  await expect
+    .poll(() =>
+      page.locator(".map canvas").evaluate((canvas) => {
+        const pane = canvas.closest(".map")!;
+        return canvas.clientWidth <= pane.clientWidth && canvas.clientHeight <= pane.clientHeight;
+      }),
+    )
+    .toBe(true);
+  await page.screenshot({ path: "test-results/geoduck-fit.png" });
+
   await openView();
   await view.getByRole("menuitemcheckbox", { name: /Nevanda Tiles/ }).click();
   await expect(icon).toHaveCSS("background-image", /nevanda\.png/);

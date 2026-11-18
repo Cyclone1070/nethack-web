@@ -66,7 +66,7 @@ function savedTileSet(): TileSet {
 function sameTileSet(a: TileSet, b: TileSet): boolean {
   return a.file === b.file && !!a.imported === !!b.imported;
 }
-const MAP_CELLS = [16, 24, 32, 48, 64];
+const MAP_CELLS = [8, 12, 16, 24, 32, 48, 64];
 const ZOOM_KEY = "nethack.mapCell";
 const DEFAULT_CELL = 32;
 // with Cmd or Ctrl, as Cocoa's View menu has them; 0 is back to the starting size
